@@ -1,8 +1,8 @@
-#Simple Shell Project
-#Overview
-##Write a simmple UNIX Command Interpreter
-#Aim
-##A UNIX Command Line Interpreter Built in C
+# Simple Shell Project
+# Overview
+## Write a simmple UNIX Command Interpreter
+# Aim
+## A UNIX Command Line Interpreter Built in C
 
 1. Who designed and implemented the original Unix operating Sytem?
 Ken Thompson and Dennis Ritchie created the first version of UNIX as a team in 1969
