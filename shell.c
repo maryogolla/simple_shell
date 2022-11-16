@@ -26,7 +26,7 @@ int main(void)
 
 	while (1)
 	{
-	printf("$ ");
+	_printf("$ ");
 	buffer = malloc(bufsize * sizeof(char));
 	if (buffer == NULL)
 	{
@@ -65,7 +65,7 @@ int main(void)
 			path = findpath(file, head);
 			if (path == NULL)
 			{
-				printf("./hsh: %s: not found\n", av[0]);
+				_printf("./hsh: %s: not found\n", av[0]);
 				free(buffer);
 				free(real_path);
 				freevector(av);
@@ -77,7 +77,7 @@ int main(void)
 			path = searchpath(file, buffer);
 		if (path == NULL)
 		{
-			printf("./hsh: %s: no such file or directory\n", av[0]);
+			_printf("./hsh: %s: no such file or directory\n", av[0]);
 			free(real_path);
 			free(buffer);
 			continue;
@@ -114,7 +114,7 @@ int main(void)
 		path = findpath(file, head);
 		if (path == NULL)
 		{
-			printf("./hsh: %s: not found\n", av[0]);
+			_printf("./hsh: %s: not found\n", av[0]);
 			free(real_path);
 			free(buffer);
 			continue;

@@ -1,6 +1,8 @@
 #ifndef MAIN_H
 #define MAIN_H
 #include <limits.h>
+#include <stddef.h>
+#include <stdarg.h>
 /**
  * struct path_s - defines a new structure
  * @name: first member
@@ -27,4 +29,13 @@ char *searchpath(char *, char *);
 int comparestrings(char *, char *);
 void string_concat(char **, char *);
 void free_list(path_h *);
+int printstring(const char *);
+void writeint(unsigned int, int);
+int printint(int);
+int calculate_numbers(unsigned int);
+int printunsigned(unsigned int);
+void writeunsigned(unsigned int, int);
+int _putchar(char);
+int _printf(const char *format, ...);
+int formatchecker(va_list, const char *);
 #endif
