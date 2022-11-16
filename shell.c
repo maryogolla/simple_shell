@@ -12,7 +12,7 @@ int main(void)
 	int exitstatus = 0;
 
 	signal(SIGINT, SIG_IGN);
-	PATH = _genenv("PATH");
+	PATH = _getenv("PATH");
 	if (PATH == NULL)
 		return (-1);
 	while (1)
