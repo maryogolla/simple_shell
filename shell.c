@@ -37,7 +37,7 @@ int main(void)
 	if (characters == -1)
 	{
 		free(buffer);
-		return (1);
+		_exit(1);
 	}
 
 
