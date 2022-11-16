@@ -38,4 +38,7 @@ void writeunsigned(unsigned int, int);
 int _putchar(char);
 int _printf(const char *format, ...);
 int formatchecker(va_list, const char *);
+void handle_sigint(int);
+void free_all(char *, char **, char *);
+char *path_finder(char *, char **, char *, char **, char *, path_h *);
 #endif

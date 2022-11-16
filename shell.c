@@ -5,10 +5,18 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <string.h>
+#include <signal.h>
 #include "main.h"
 
-
-int main(__attribute__((unused))int ac, __attribute__((unused))char **argv, char **environ)
+void handle_sigint(int sig)
+{
+	if (sig == SIGINT)
+	{
+		_printf("\n");
+		exit (0);
+	}
+}
+int main(__attribute__((unused))int ac, char **argv, char **environ)
 {
 	char *buffer, *token, *token2, *currentposition, *file, *path, *pathptr;
 	size_t bufsize = 100;
@@ -23,6 +31,7 @@ int main(__attribute__((unused))int ac, __attribute__((unused))char **argv, char
 	pathptr = get_path_string(&path_buffer, environ);
 	createlinkedlist(pathptr, &head);
 
+	signal(SIGINT, handle_sigint);
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
@@ -52,36 +61,9 @@ int main(__attribute__((unused))int ac, __attribute__((unused))char **argv, char
 		av = malloc(sizeof(char *) * 2);
 		copystring(file, &av[0]);;
 		av[1] = NULL;
-		if (file == buffer)
-		{
-			if ((comparestrings(file, "exit") == 0))
-			{
-				free(buffer);
-				freevector(av);
-				free(av);
-				free(real_path);
-				_exit(status);
-			}
-			path = findpath(file, head);
-			if (path == NULL)
-			{
-				_printf("./hsh: %s: not found\n", av[0]);
-				free(buffer);
-				free(real_path);
-				freevector(av);
-				free(av);
-				continue;
-			}
-		}
-		else
-			path = searchpath(file, buffer);
+		path = path_finder(file, argv, buffer, av, real_path, head);
 		if (path == NULL)
-		{
-			_printf("./hsh: %s: no such file or directory\n", av[0]);
-			free(real_path);
-			free(buffer);
 			continue;
-		}
 		copystring2(path, real_path);
 		string_concat(&real_path, file);
 	}
@@ -116,9 +98,8 @@ int main(__attribute__((unused))int ac, __attribute__((unused))char **argv, char
 		path = findpath(file, head);
 		if (path == NULL)
 		{
-			_printf("./hsh: %s: not found\n", av[0]);
-			free(real_path);
-			free(buffer);
+			_printf("%s: 1: %s: not found\n", argv[0], av[0]);
+			free_all(buffer, av, real_path);
 			continue;
 		}
 		copystring2(path, real_path);
@@ -133,14 +114,10 @@ int main(__attribute__((unused))int ac, __attribute__((unused))char **argv, char
 	else
 	{
 		wait(&status);
-		free(real_path);
-		free(buffer);
-		freevector(av);
-		free(av);
+		free_all(buffer, av, real_path);
 	}
 	}
 	free(buffer);
-	pathptr = NULL;
 	free(path_buffer);
 	free_list(head);
 	return (0);
@@ -152,8 +129,6 @@ void copystring(char *ptr1, char **ptr2)
 	int j = 0;
 	char *s = ptr1;
 	char *p = ptr1;
-	if (ptr1 == NULL)
-		return;
 	while (*p != '\0')
 	{
 		j++;
