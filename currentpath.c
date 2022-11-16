@@ -4,7 +4,6 @@
 #include <limits.h>
 #include "main.h"
 
-extern char **environ;
 char *tokenizepath(char *p, char delimiter, int *flag, char **a)
 {
 	char *token = malloc(sizeof(char) * 100);
@@ -72,17 +71,17 @@ void copystring2(char *s, char *s1)
 }
 
 
-path_h *add_node_end(path_h **head, char *str)
+void add_node_end(path_h **head, char *str)
 {
 	path_h *ptr, *lastnode;
 
 	if (head == NULL)
-		return (NULL);
+		return;
 
 	ptr = malloc(sizeof(path_h));
 
 	if (ptr == NULL)
-		return (NULL);
+		return;
 
 	copystring2(str, ptr->name);
 	ptr->next = NULL;
@@ -98,7 +97,6 @@ path_h *add_node_end(path_h **head, char *str)
 		}
 		lastnode->next = ptr;
 	}
-	return (ptr);
 
 }
 

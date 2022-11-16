@@ -15,4 +15,6 @@ void createlinkedlist(char *buff, path_h **head)
 		free(token);
 		token = tokenizepath(buff, ':', &flag, &currentposition);
 	}
+	free(token);
+	currentposition = NULL;
 }

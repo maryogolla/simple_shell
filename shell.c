@@ -7,9 +7,8 @@
 #include <string.h>
 #include "main.h"
 
-extern char **environ;
 
-int main(void)
+int main(__attribute__((unused))int ac, __attribute__((unused))char **argv, char **environ)
 {
 	char *buffer, *token, *token2, *currentposition, *file, *path, *pathptr;
 	size_t bufsize = 100;
@@ -21,7 +20,7 @@ int main(void)
 	char *real_path;
 
 	path_h *head = NULL;
-	pathptr = get_path_string(&path_buffer);
+	pathptr = get_path_string(&path_buffer, environ);
 	createlinkedlist(pathptr, &head);
 
 	while (1)
@@ -31,7 +30,7 @@ int main(void)
 	if (buffer == NULL)
 	{
 		perror("Failed to allocate space");
-		return (0);
+		return (1);
 	}
 	characters = getline(&buffer, &bufsize, stdin);
 	if (characters == -1)
@@ -94,6 +93,7 @@ int main(void)
 			free(token);
 			token = tokenizepath(buffer, ' ', &flag, &currentposition);
 		}
+		free(token);
 		av = malloc((i + 1) * sizeof(char *));
 		if (av == NULL)
 			return (0);
@@ -109,6 +109,7 @@ int main(void)
 			i++;
 			token2 = tokenizepath(buffer, ' ', &flag, &currentposition);
 		}
+		free(token2);
 		av[i] = NULL;
 		file = av[0];
 		path = findpath(file, head);
@@ -138,6 +139,7 @@ int main(void)
 	}
 	}
 	free(buffer);
+	pathptr = NULL;
 	free(path_buffer);
 	free_list(head);
 	return (0);
@@ -177,7 +179,7 @@ void freevector(char **av)
 		i++;
 	}
 }
-char *get_path_string(char **buf)
+char *get_path_string(char **buf, char **environ)
 {
 	int i = 0, l = 0;
 	char *ptr;
