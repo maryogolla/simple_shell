@@ -1,48 +1,50 @@
-#ifndef MAIN_H
-#define MAIN_H
-#include <limits.h>
-#include <stddef.h>
-#include <stdarg.h>
+#ifndef _MAIN_
+#define _MAIN_
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <fcntl.h>
+#include <string.h>
+#include <signal.h>
+
 extern char **environ;
-/**
- * struct path_s - defines a new structure
- * @name: first member
- * @next: second member
- */
-typedef struct path_s
-{
-	char name[PATH_MAX];
-	struct path_s *next;
-} path_h;
-char *tokenizepath(char *, char, int *, char **);
-char *shiftcharacter(char **, int);
-void copystring2(char *, char *);
-void trim_end(char **);
-void add_node_end(path_h **, char *);
-int findpath_to_executable(path_h **);
-void copystring(char *, char **);
-void freevector(char **);
-char *getlaststring(char **);
-char *get_path_string(char **, char **);
-void createlinkedlist(char*, path_h **);
-char *findpath(char *, path_h *head);
-char *searchpath(char *, char *);
-int comparestrings(char *, char *);
-void string_concat(char **, char *);
-void free_list(path_h *);
-int printstring(const char *);
-void writeint(unsigned int, int);
-int printint(int);
-int calculate_numbers(unsigned int);
-int printunsigned(unsigned int);
-void writeunsigned(unsigned int, int);
-int _putchar(char);
-int _printf(const char *format, ...);
-int formatchecker(va_list, const char *);
-void handle_sigint(int);
-void free_all(char *, char **, char *);
-char *path_finder(char *, char **, char *, char **, char *, path_h *);
-void fork_process(pid_t, char *, char **, char *, int *);
-#endif
+
+/*PATH Shell Functions */
+
+/*Program Flow */
+
+int prompt(void);
+char *_read(void);
+char *_fullpathbuffer(char **av, char *PATH, char *copy);
+int checkbuiltins(char **av, char *buffer, int exitstatus);
+int _forkprocess(char **av, char *buffer, char *fullpathbuffer);
+
+/*String Helper Functions */
+
+char *strdup(char *str);
+int _splitstring(char *str);
+int _strcmp(const char *s1. const char *s2);
+char *_strcat(char *dest, char *src);
+int _strlen(char *s);
+
+/*Tokenize & PATH Helper Function*/
+
+char **tokenize(char *buffer);
+int _splitPATH(char *str);
+int _PATHstrcmp(const char *s1, const char *s2);
+char *_concat(char *tmp, char **av, char *tok);
+
+/*Other Helper Funcs*/
+
+char *_getenv(const char *name);
+int _env(void);
+void _puts(char *str);
+int _putchar(char c);
+char *_memset(char *s, char b, unsigned int n);
+
+#endif /*_MAIN_*/
