@@ -7,7 +7,7 @@
 #include <string.h>
 #include <signal.h>
 #include "main.h"
-
+#include "leak_detector_c.h"
 void handle_sigint(int sig)
 {
 	if (sig == SIGINT)
@@ -26,6 +26,8 @@ int main(__attribute__((unused))int ac, char **argv, char **environ)
 	char *path_buffer = malloc(sizeof(char) * 150);
 	pid_t child_pid;
 	char *real_path;
+
+	atexit(report_mem_leak);
 
 	path_h *head = NULL;
 	pathptr = get_path_string(&path_buffer, environ);
