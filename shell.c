@@ -25,7 +25,8 @@ int main(__attribute__((unused))int ac, __attribute__((unused))char **argv, char
 
 	while (1)
 	{
-	_printf("$ ");
+		if (isatty(STDIN_FILENO))
+			_printf("#cisfun$ ");
 	buffer = malloc(bufsize * sizeof(char));
 	if (buffer == NULL)
 	{
