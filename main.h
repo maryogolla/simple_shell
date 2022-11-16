@@ -3,6 +3,9 @@
 #include <limits.h>
 #include <stddef.h>
 #include <stdarg.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+extern char **environ;
 /**
  * struct path_s - defines a new structure
  * @name: first member
@@ -41,4 +44,5 @@ int formatchecker(va_list, const char *);
 void handle_sigint(int);
 void free_all(char *, char **, char *);
 char *path_finder(char *, char **, char *, char **, char *, path_h *);
+void fork_process(pid_t, char *, char **, char *, int *);
 #endif

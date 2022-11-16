@@ -7,6 +7,7 @@
 #include <string.h>
 #include <signal.h>
 #include "main.h"
+#include "leak_detector_c.h"
 
 void handle_sigint(int sig)
 {
@@ -26,6 +27,8 @@ int main(__attribute__((unused))int ac, char **argv, char **environ)
 	char *path_buffer = malloc(sizeof(char) * 150);
 	pid_t child_pid;
 	char *real_path;
+	
+	atexit(report_mem_leak);
 
 	path_h *head = NULL;
 	pathptr = get_path_string(&path_buffer, environ);
@@ -76,7 +79,6 @@ int main(__attribute__((unused))int ac, char **argv, char **environ)
 			free(token);
 			token = tokenizepath(buffer, ' ', &flag, &currentposition);
 		}
-		free(token);
 		av = malloc((i + 1) * sizeof(char *));
 		if (av == NULL)
 			return (0);
@@ -92,7 +94,6 @@ int main(__attribute__((unused))int ac, char **argv, char **environ)
 			i++;
 			token2 = tokenizepath(buffer, ' ', &flag, &currentposition);
 		}
-		free(token2);
 		av[i] = NULL;
 		file = av[0];
 		path = findpath(file, head);
@@ -106,16 +107,7 @@ int main(__attribute__((unused))int ac, char **argv, char **environ)
 		string_concat(&real_path, file);
 	}
 	child_pid = fork();
-	if (child_pid == 0)
-	{
-		execve(real_path, av, environ);
-		exit(0);
-	}
-	else
-	{
-		wait(&status);
-		free_all(buffer, av, real_path);
-	}
+	fork_process(child_pid, real_path, av, buffer, &status);
 	}
 	free(buffer);
 	free(path_buffer);
